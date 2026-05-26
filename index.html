@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="bpaas-design-system" content="brutalist-avantgarde">
+    <meta name="bpaas-design-theme" content="kr-neon-void">
+    
+    <!-- SEO Meta Tags -->
+    <title>부산 해운대 해변 | 진실과 모래의 데이터</title>
+    <meta name="description" content="해운대는 관광지다. 비싸고 붐빈다. 하지만 부산의 상징이다. 물이 깨끗하지는 않지만 파도는 치고 있다. 실용적인 정보만 남겼다.">
+    <meta name="keywords" content="부산 해운대, 부산 해변, 해운대 바닷가, 부산 여행, 해운대 모래축제, 부산 맛집, 부산 숙소, 한국 여행">
+    <link rel="canonical" href="https://busan-data-void.kr/">
+    
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BUSAN BEACH: 데이터 기반의 해부">
+    <meta property="og:description" content="감상은 배제했다. 해운대에 대한 날것의 사실들.">
+    <meta property="og:image" content="og-image.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BUSAN BEACH: 데이터 기반의 해부">
+    <meta name="twitter:description" content="감상은 배제했다. 해운대에 대한 날것의 사실들.">
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Haeundae Beach",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Haeundae-gu",
+        "addressRegion": "Busan",
+        "addressCountry": "KR"
+      },
+      "description": "한국을 대표하는 해변. 물은 탁하고 사람은 많지만 파장은 존재한다.",
+      "telephone": "",
+      "image": "https://busan-data-void.kr/assets/haeundae-raw.jpg"
+    }
+    </script>
+
+    <style>
+        /* RESET & BASE */
+        :root {
+            --bg: #000000;
+            --fg: #ffffff;
+            --accent: #ff3b00;
+            --border: 4px;
+            --space-unit: 24px;
+            --font-main: 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+            --font-body: 'Courier New', Courier, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            border: 20px solid var(--bg); /* Space simulation */
+        }
+
+        a { color: var(--fg); text-decoration: none; }
+        ul { list-style: none; }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 {
+            font-family: var(--font-main);
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            line-height: 0.9;
+        }
+
+        h1 {
+            font-size: clamp(4rem, 15vw, 12rem);
+            color: var(--fg);
+            position: relative;
+            z-index: 2;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 8vw, 6rem);
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--accent);
+            display: inline-block;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            max-width: 70ch;
+        }
+
+        /* UTILS */
+        .highlight { color: var(--accent); }
+        .raw-border { border: var(--border) solid var(--fg); }
+        .accent-border { border: var(--border) solid var(--accent); }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+        
+        /* LAYOUT COMPONENTS */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 var(--space-unit);
+        }
+
+        /* HEADER */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: var(--bg);
+            border-bottom: var(--border) solid var(--fg);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-main);
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .menu-toggle {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 10px 20px;
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--accent);
+            color: var(--bg);
+            border-left: var(--border) solid var(--fg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: right 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 99;
+        }
+
+        nav.active { right: 0; }
+
+        nav ul li {
+            margin: 2rem 0;
+        }
+
+        nav ul li a {
+            font-family: var(--font-main);
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 60%;
+            height: 60%;
+            border: 4px solid var(--accent);
+            z-index: 1;
+            transform: rotate(-5deg);
+        }
+
+        .hero-content {
+            z-index: 10;
+            text-align: center;
+            background: var(--bg);
+            padding: 2rem;
+            border: 4px solid var(--fg);
+            max-width: 90%;
+        }
+
+        .hero-subtitle {
+            display: block;
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        /* DATA SECTION (Asymmetric) */
+        .section-data {
+            padding: 120px 0;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            background: var(--fg);
+            color: var(--bg);
+            position: relative;
+        }
+
+        .data-sticky {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            border: 4px solid var(--bg);
+            padding: 2rem;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .data-card {
+            border: 4px solid var(--bg);
+            padding: 2rem;
+            background: #fff;
+            box-shadow: 20px 20px 0px var(--accent);
+            transition: transform 0.2s;
+        }
+
+        .data-card:hover {
+            transform: translate(-10px, -10px);
+            box-shadow: 30px 30px 0px var(--bg);
+        }
+
+        .data-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        /* REVIEW SECTION */
+        .reviews {
+            padding: 120px 2rem;
+            background: var(--bg);
+        }
+
+        .review-scroller {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding-bottom: 2rem;
+        }
+
+        .review-card {
+            min-width: 350px;
+            border: 2px solid var(--accent);
+            padding: 2rem;
+            background: #111;
+            position: relative;
+        }
+
+        .review-card::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            z-index: 0;
+        }
+
+        .stars { color: var(--accent); font-size: 1.5rem; }
+        
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+            font-family: var(--font-main);
+            font-size: 1.2rem;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 10px solid var(--accent);
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--bg);
+            color: var(--fg);
+        }
+
+        .footer-logo {
+            font-family: var(--font-main);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .section-data {
+                grid-template-columns: 1fr;
+                padding: 60px 0;
+            }
+            .data-sticky {
+                position: relative;
+                top: 0;
+                margin-bottom: 2rem;
+            }
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2.5rem; }
+            .hero::before { display: none; }
+        }
+    </style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+    <!-- NAV -->
+    <header>
+        <div class="logo">BUSAN<span class="highlight">DATA</span></div>
+        <button class="menu-toggle" onclick="toggleMenu()">MENU</button>
+    </header>
+
+    <nav id="navbar">
+        <ul>
+            <li><a href="#hero" onclick="toggleMenu()">Home</a></li>
+            <li><a href="#data" onclick="toggleMenu()">Data</a></li>
+            <li><a href="#reviews" onclick="toggleMenu()">Reviews</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <!-- HERO -->
+        <section id="hero" class="hero">
+
+<!-- SEO Visual 1: Busan beach 안내 Brutalist Avant-Garde Hero -->
+<div class="seo-visual-hero" role="img" aria-label="신뢰할 수 있는 서비스 — Busan Busan beach 안내" 
+     style="width:100%;padding:120px 0 60px 0;background:#000000;text-align:left;margin:0;position:relative">
+  <div style="max-width:1100px;margin:0 auto;padding:0 24px">
+    <div style="font-family:monospace;font-size:0.75rem;letter-spacing:0.4em;color:#ffffff;margin-bottom:24px;text-transform:uppercase">/ PERSPECTIVE DECONSTRUCTED</div>
+    <div style="font-size:7.5vw;line-height:0.95;font-weight:900;font-family:serif;color:#ffffff;letter-spacing:-0.05em;margin:0 0 32px 0;text-transform:uppercase">Busan beach 안내</div>
+    <p style="font-size:1.1rem;line-height:1.7;color:#ffffff;max-width:550px;font-weight:300;margin:0">신뢰할 수 있는 서비스</p>
+  </div>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"ImageObject","name":"Busan beach 안내","description":"신뢰할 수 있는 서비스","contentUrl":"data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22/>"}</script>
+</div>
+            <div class="hero-content raw-border">
+                <span class="hero-subtitle">/// SYSTEM: BUSAN_Beach_v1.0</span>
+                <h1>BUSAN<br><span class="highlight" style="background:var(--fg); color:var(--bg); padding:0 10px;">BEACH</span><br>REALITY</h1>
+                <p style="margin-top: 1rem; font-weight: bold;">
+                    낭만? 그건 광고다.<br>
+                    여기는 <span class="highlight">모래와 소금기, 그리고 사람</span>의 데이터다.
+                </p>
+            </div>
+        </section>
+
+<!-- SEO Visual 2: 정보 Brutalist Typography Cards -->
+<div class="seo-visual-cards" role="img" aria-label="Busan beach 안내 정보 — 신뢰할 수 있는 서비스" 
+     style="display:flex;flex-direction:column;gap:80px;margin:120px auto;max-width:1100px;padding:0 24px">
+  <div style="display:flex;flex-direction:column;align-items:flex-start;background:transparent;padding:0;border:none;box-shadow:none">
+    <div style="font-family:serif;font-weight:900;font-size:3.5rem;color:#ffffff;line-height:1;margin-bottom:12px;letter-spacing:-0.03em">01</div>
+    <div style="font-weight:800;font-size:1.6rem;color:#ffffff;letter-spacing:-0.02em;margin-bottom:8px">특화</div>
+    <div style="font-family:monospace;font-size:0.75rem;letter-spacing:0.2em;color:#888888;text-transform:uppercase">Busan beach 안내</div>
+  </div><div style="display:flex;flex-direction:column;align-items:flex-start;background:transparent;padding:0;border:none;box-shadow:none">
+    <div style="font-family:serif;font-weight:900;font-size:3.5rem;color:#ffffff;line-height:1;margin-bottom:12px;letter-spacing:-0.03em">02</div>
+    <div style="font-weight:800;font-size:1.6rem;color:#ffffff;letter-spacing:-0.02em;margin-bottom:8px">다수 실적</div>
+    <div style="font-family:monospace;font-size:0.75rem;letter-spacing:0.2em;color:#888888;text-transform:uppercase">Busan beach 안내</div>
+  </div><div style="display:flex;flex-direction:column;align-items:flex-start;background:transparent;padding:0;border:none;box-shadow:none">
+    <div style="font-family:serif;font-weight:900;font-size:3.5rem;color:#ffffff;line-height:1;margin-bottom:12px;letter-spacing:-0.03em">03</div>
+    <div style="font-weight:800;font-size:1.6rem;color:#ffffff;letter-spacing:-0.02em;margin-bottom:8px">고품질</div>
+    <div style="font-family:monospace;font-size:0.75rem;letter-spacing:0.2em;color:#888888;text-transform:uppercase">Busan beach 안내</div>
+  </div>
+</div>
+
+        <!-- CONTENT / DATA -->
+        <section id="data" class="section-data">
+            <div class="container" style="display:contents">
+                <div class="data-sticky">
+                    <h2>FACT<br><span class="highlight">CHECK</span></h2>
+                    <p>
+                        감상은 필요 없다. 해운대는 한국 최대의 해변 중 하나다.<br>
+                        여름에는 인파가 몰려 숨도 못 쉰다.<br>
+                        겨울에는 차가운 바람만 분다.<br>
+                        하지만 그 <span class="highlight">존재감</span>은 부정할 수 없다.
+                    </p>
+                    <div style="margin-top: 2rem; border: 4px solid var(--bg); padding: 1rem; transform: rotate(2deg);">
+                        <strong>WARNING:</strong><br>
+                        여름철 해수면 온도는 영상 25도 내외.<br>
+                        겨울철 체감오ᅩᆫ도는 영하 10도 이하.<br>
+                        각오ᄒ하고 오라.
+                    </div>
+                </div>
+
+                <div class="data-grid">
+                    <article class="data-card">
+                        <h3>01. ACCESS</h3>
+                        <p>
+                            지하철 2호선 해운대역.<br>
+                            5번 출구로 나오면 바다가 보일 것 같지만 안 보인다.<br>
+                            700m 를 걸어야 한다.<br>
+                            <span class="highlight">걸어라.</span> 그거면 살 빠진다.
+                        </p>
+                    </article>
+
+                    <article class="data-card" style="margin-top: 4rem;">
+                        <h3>02. COST</h3>
+                        <p>
+                            입장료는 무료다.<br>
+                            하지만 모래밭 의자 대여료, 파라솔 값, 주변 음식값은 비싸다.<br>
+                            편의를 원한다면 대가를 지불해라.<br>
+                            그게 <span class="highlight">시장의 논리</span>다.
+                        </p>
+                    </article>
+
+                    <article class="data-card">
+                        <h3>03. ACTIVITY</h3>
+                        <p>
+                            겨울철 북극곰 수영대회는 매년 1 월 1 일이다.<br>
+                        여름에는 서핑이 가능하다.<br>
+                        아무것도 안 하고 서 있는 것도 방법이지만,<br>
+                        <span class="highlight">바람이 세다.</span> 감기 조심해라.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS -->
+        <section id="reviews" class="reviews">
+            <div class="container">
+                <h2 style="color: var(--fg); border-color: var(--fg);">USER<br><span class="highlight">LOGS</span></h2>
+                <div class="review-scroller">
+                    <!-- Review 1 -->
+                    <div class="review-card">
+                        <div class="user-info">
+                            <span>@DataHunter</span>
+                            <span>2023.10.02</span>
+                        </div>
+                        <div class="stars">★★★★☆</div>
+                        <p>사람이 너무 많다. 사진 찍으면 사람만 찍힌다. 그래도 야경은 인정한다. 동백섬까지 이어지는 산책로가 유일한 구명줄.</p>
+                    </div>
+                    <!-- Review 2 -->
+                    <div class="review-card">
+                        <div class="user-info">
+                            <span>@TruthSeeker</span>
+                            <span>2023.08.15</span>
+                        </div>
+                        <div class="stars">★★★☆☆</div>
+                        <p>여름 해운대는 지옥이다. 더우시고, 덥고, 시끄럽다. 하지만 그 열기가 필요하다면 여기에 와라. 후회는 안 할 것 같다.</p>
+                    </div>
+                    <!-- Review 3 -->
+                    <div class="review-card">
+                        <div class="user-info">
+                            <span>@WinterIsComing</span>
+                            <span>2024.01.01</span>
+                        </div>
+                        <div class="stars">★★★★★</div>
+                        <p>북극곰 수영 대회 보러 옴. 바보는 없다. 다들 제정신이 아니다. 근데 왜 다 같이 외치면 심장이 뛴다. 1 년 치 스트레스 발산.</p>
+                    </div>
+                </div>
+            </div>
+        
+<div class="seo-visual-divider" role="separator" aria-label="Busan beach 안내 구분선" style="margin:80px 0;height:1px;background:#888888;opacity:0.1"></div>
+</section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <span class="footer-logo">BRO_PBN</span>
+        <p style="font-size: 0.9rem; margin: 0 auto; max-width: 600px;">
+            본 사이트의 데이터는 사실에 기반하고 있습니다.<br>
+            하지만 당신의 경험은 다를 수 있습니다. 감당하세요.<br>
+            &copy; 2024 Busan Beach Info. All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('active');
+        }
+    </script>
+
+    <div class="juice-ref-kd7r47" style="margin-top:2.5rem;padding:1rem 0;border-top:1px dashed #ccc;font-size:0.9rem;color:#666;">
+      <p style="font-weight:600;margin-bottom:0.5rem;">함께 보면 좋은 정보</p>
+      <ul style="list-style:none;padding:0;margin:0;">
+      <li>이 주제에 대한 더 전문적인 분석은 <a href="https://test-it-blog.online/">test-it-blog</a>에서 확인하실 수 있습니다.</li>
+      <li>이 주제에 대한 더 전문적인 분석은 <a href="https://aga-clinic.space/">tokyo-aga</a>에서 확인하실 수 있습니다.</li>
+      <li>자세한 기술 명세 가이드는 <a href="https://ko.wikipedia.org/" rel="noopener noreferrer" target="_blank">공식 가이드 커뮤니티</a>를 참고하십시오.</li>
+      </ul>
+    </div>
+</body>
+</html>
